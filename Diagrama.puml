@@ -1,0 +1,132 @@
+@startuml Tetris
+class Audio {
+  +Reproducir()
+  +Detener()
+  
+}
+class Musica {
+  +CambiarCancion()
+}
+class EfectoSonido {
+  +ReproducirEfecto()
+}
+class Reproductor {
+  +ReproducirAudio()
+  +DetenerAudio()
+  -sonido:Audio
+}
+Musica "*" --|> "1" Audio
+EfectoSonido "*" --|> "1" Audio
+Reproductor "1" o-- "*" Audio
+
+class Juego {
+  +IniciarJuego()
+  +PausarJuego()
+  +ReanudarJuego()
+  -reproductor:Reproductor
+}
+class EstadoJuego {
+  +CambiarEstado()
+}
+class Nivel {
+  +IncrementarNivel()
+}
+class Timer {
+  +Iniciar()
+  +Detener()
+  +Reiniciar()
+}
+class SesionJuego {
+  +TerminarSesion()
+}
+Juego "1" o-- "1" Reproductor
+Juego "1" o-- "1" Nivel
+Juego "1" *-- "1" EstadoJuego
+Juego "1" *-- "1" Configuracion
+Juego "1" o-- "1" Control
+EstadoJuego "1" o-- "1" Juego
+EstadoJuego "1" o-- "1" Puntaje
+EstadoJuego "1" o-- "1" GeneradorPieza
+EstadoJuego "1" o-- "1" PantallaPausa
+EstadoJuego "1" o-- "1" SesionJuego
+EstadoJuego "1" o-- "1" ProximaPieza
+Timer "1" o-- "1" Nivel
+Nivel "1" o-- "1" EstadoJuego
+Nivel "1" o-- "1" Puntaje
+Juego "1" *-- "1" Tablero
+Juego "1" -- "1" Celda
+Juego "1" o-- "1" InterfazUsuario
+
+class Jugador {
+  +ActualizarPuntaje()
+}
+class Puntaje {
+  +SumarPuntos()
+}
+class RegistroPuntuacion {
+  +GuardarPuntaje()
+}
+Jugador "1" *-- "1" Puntaje
+RegistroPuntuacion "1" o-- "*" Puntaje
+Jugador "1" o-- "1" Configuracion
+Jugador "1" o-- "1" EntradaJugador
+Puntaje "1" o-- "1" Timer
+
+class Tablero {
+  +LimpiarLineas()
+}
+class Celda {
+  +Ocupar()
+  +Liberar()
+}
+class GestorColisiones {
+  +VerificarColision()
+}
+class GeneradorPieza {
+  +GenerarTetramino()
+}
+class Tetramino {
+  +MoverIzquierda()
+  +MoverDerecha()
+  +Rotar()
+  +Bajar()
+  -tipoBloque: Bloque
+}
+class Bloque {
+  +Mover()
+}
+class Pieza
+class ProximaPieza {
+  +MostrarSiguiente()
+}
+Tablero "1" o-- "1" GestorColisiones
+Celda "1" --|> "1" Grafico
+Bloque "4" --|> "1" Grafico
+Tetramino "1" *-- "4" Bloque
+Tetramino "1" --|> "1" Pieza
+GestorColisiones "1" o-- "1" Tetramino
+GeneradorPieza "1" o-- "7" Tetramino
+
+class InterfazUsuario {
+  +MostrarPantalla()
+  +OcultarPantalla()
+}
+class PantallaPausa {
+  +Mostrar()
+  +Ocultar()
+}
+class EntradaJugador {
+  +ProcesarEntrada()
+}
+class Configuracion {
+  +CambiarDificultad()
+  -dificultad: Dificultad
+}
+class Control
+class Dificultad
+
+Juego *-- Dificultad
+Configuracion o-- Dificultad
+
+Jugador "1" o-- "1" EntradaJugador
+@enduml
