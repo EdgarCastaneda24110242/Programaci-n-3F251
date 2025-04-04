@@ -32,7 +32,7 @@ public:
     {
         for (size_t i = 0; i < 10; i++)
         {
-            
+
             std::cout << focos[1].LeerEstado();
         }
         std::cout << std::endl;
